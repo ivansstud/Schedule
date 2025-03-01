@@ -5,6 +5,10 @@ namespace Schedule.Core.Models;
 
 public class Group : Entity
 {
+    public const int MaxNameLength = 50;
+    public const int MaxInstitutionNameLength = 100;
+    public const int MaxDescriptionLength = 100;
+
     private readonly List<User> _members = [];
     private readonly List<Lesson> _lessons = [];
 
@@ -16,6 +20,9 @@ public class Group : Entity
         InstitutionName = institutionName;
         Description = description;
     }
+
+    //Для EF Core
+    private Group(){ }
 
     public string Name { get; private set; }
     public long CreatorId { get; private set; }

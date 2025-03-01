@@ -6,8 +6,14 @@ namespace Schedule.Core.Models;
 
 public class Lesson : Entity
 {
-    protected Lesson(
+    public const int MaxNameLength = 50;
+    public const int MaxTeacherNameLength = 20;
+    public const int MaxDescriptionLength = 200;
+    public const int MaxAuditoriumLength = 15;
+
+    private Lesson(
         string name,
+        long grpupId,
         LessonWeekType weekType,
         LessonTime lessonTime,
         LessonDayOfWeek dayOfWeek,
@@ -17,16 +23,21 @@ public class Lesson : Entity
         string? teacherName)
     {
         Name = name;
+        GroupId = grpupId;
         WeekType = weekType;
-        LessonTime = lessonTime;
         DayOfWeek = dayOfWeek;
+        LessonTime = lessonTime;
         LessonType = lessonType;
         Auditorium = auditorium;
         Description = description;
         TeacherName = teacherName;
     }
 
+    //Для EF Core
+    private Lesson() { }
+
     public string Name { get; private set; }
+    public long GroupId { get; private set; }
     public LessonWeekType WeekType { get; private set; }
     public LessonTime LessonTime { get; private set; }
     public LessonDayOfWeek DayOfWeek { get; private set; }
@@ -37,6 +48,7 @@ public class Lesson : Entity
 
     public static Result<Lesson> Create(
         string name,
+        long grpupId,
         LessonWeekType weekType,
         LessonTime lessonTime,
         LessonDayOfWeek dayOfWeek,
@@ -45,11 +57,12 @@ public class Lesson : Entity
         string? description = null,
         string? teacherName = null)
     {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(grpupId, nameof(grpupId));
+
         if (string.IsNullOrEmpty(name) || string.IsNullOrWhiteSpace(name))
         {
             return Result.Failure<Lesson>("Имя занятия не может быть пустым");
         }
-       
         if (string.IsNullOrEmpty(description) || string.IsNullOrWhiteSpace(description))
         {
             description = null;
@@ -63,7 +76,7 @@ public class Lesson : Entity
             auditorium = null;
         }
 
-        var newLesson = new Lesson(name, weekType, lessonTime, dayOfWeek, lessonType, description, auditorium, teacherName);
+        var newLesson = new Lesson(name, grpupId, weekType, lessonTime, dayOfWeek, lessonType, description, auditorium, teacherName);
         return Result.Success(newLesson);
     }
 }
