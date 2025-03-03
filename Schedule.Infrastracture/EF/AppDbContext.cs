@@ -11,7 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
     }
 
-    public DbSet<User> Users { get; set; }
+    public DbSet<AppUser> Users { get; set; }
     public DbSet<Lesson> Lessons { get; set; }
     public DbSet<Group> Groups { get; set; }
 }

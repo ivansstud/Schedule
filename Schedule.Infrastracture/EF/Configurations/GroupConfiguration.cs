@@ -26,7 +26,7 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
 
         builder.HasMany(g => g.Members)
             .WithMany(u => u.Groups)
-            .UsingEntity(x => x.ToTable("group_users"));
+            .UsingEntity(x => x.ToTable("GroupUsers"));
 
         builder.HasMany(g => g.Lessons)
             .WithOne()
@@ -36,7 +36,8 @@ public class GroupConfiguration : IEntityTypeConfiguration<Group>
         {
             b.IsRequired();
             b.Property(n => n.Value)
-                .HasColumnName("schedule_format");
+                .HasColumnName("ScheduleFormat")
+                .HasMaxLength(100);
         });
 
         builder.Navigation(p => p.Members).UsePropertyAccessMode(PropertyAccessMode.Field);

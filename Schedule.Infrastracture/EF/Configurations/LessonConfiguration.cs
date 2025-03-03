@@ -13,27 +13,32 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
 
         builder.HasKey(l => l.Id);
         builder.Property(l => l.Id).ValueGeneratedOnAdd();
-        builder.Property(l => l.Name).IsRequired();
+
+        builder.Property(l => l.Name)
+            .IsRequired()
+            .HasMaxLength(Lesson.MaxNameLength);
+
         builder.Property(l => l.GroupId).IsRequired();
 
         builder.Property(l => l.WeekType)
             .IsRequired()
+            .HasMaxLength(100)
             .HasConversion(
                 wt => wt.ToString(),  // Преобразование Enum -> String
                 wt => (LessonWeekType)Enum.Parse(typeof(LessonWeekType), wt) // Преобразование String -> Enum
             );
 
         builder.Property(l => l.Auditorium).HasMaxLength(Lesson.MaxAuditoriumLength);
-        builder.Property(l => l.Description).HasMaxLength(Lesson.MaxAuditoriumLength);
+        builder.Property(l => l.Description).HasMaxLength(Lesson.MaxDescriptionLength);
         builder.Property(l => l.TeacherName).HasMaxLength(Lesson.MaxTeacherNameLength);
 
         builder.ComplexProperty(l => l.LessonTime, b =>
         {
             b.Property(t => t.StartTime)
-                .HasColumnName("start_time")
+                .HasColumnName("StartTime")
                 .IsRequired();
             b.Property(t => t.EndTime)
-                .HasColumnName("end_time")
+                .HasColumnName("EndTime")
                 .IsRequired();
         });
 
@@ -41,7 +46,7 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
         {
             b.IsRequired();
             b.Property(d => d.Value)
-                .HasColumnName("day")
+                .HasColumnName("DayType")
                 .HasMaxLength(100);
         });
 
@@ -49,7 +54,7 @@ public class LessonConfiguration : IEntityTypeConfiguration<Lesson>
         {
             b.IsRequired();
             b.Property(ltype => ltype.Value)
-                .HasColumnName("type")
+                .HasColumnName("Type")
                 .HasMaxLength(100);
         });
     }

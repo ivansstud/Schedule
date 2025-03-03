@@ -4,20 +4,20 @@ namespace Schedule.Core.ValueObjects;
 
 public class LessonTime : ValueObject
 {
-    private LessonTime(DateOnly startTime, DateOnly endTime)
+    private LessonTime(TimeOnly startTime, TimeOnly endTime)
     {
         StartTime = startTime;
         EndTime = endTime;
     }
 
-    public DateOnly StartTime { get; private set; }
-    public DateOnly EndTime { get; private set; }
+    public TimeOnly StartTime { get; private set; }
+    public TimeOnly EndTime { get; private set; }
 
-    public static Result<LessonTime> Create(DateOnly startTime, DateOnly endTime)
+    public static Result<LessonTime> Create(TimeOnly startTime, TimeOnly endTime)
     {
-        if (startTime <= endTime)
+        if (endTime <= startTime)
         {
-            return Result.Failure<LessonTime>("Дата начала занятия не может быть раньше или равной дате окончания");
+            return Result.Failure<LessonTime>("Дата окончания занятия не может быть раньше или равной дате начала");
         }
 
         return Result.Success(new LessonTime(startTime, endTime));

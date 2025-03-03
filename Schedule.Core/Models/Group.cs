@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using Schedule.Core.ValueObjects;
+using System.Text.Json.Serialization;
 
 namespace Schedule.Core.Models;
 
@@ -9,7 +10,7 @@ public class Group : Entity
     public const int MaxInstitutionNameLength = 100;
     public const int MaxDescriptionLength = 100;
 
-    private readonly List<User> _members = [];
+    private readonly List<AppUser> _members = [];
     private readonly List<Lesson> _lessons = [];
 
     private Group(string name, long creatorId, ScheduleFormat scheduleFormat, string? institutionName, string? description)
@@ -26,9 +27,15 @@ public class Group : Entity
 
     public string Name { get; private set; }
     public long CreatorId { get; private set; }
-    public User Creator { get; private set; } = null!;
     public ScheduleFormat ScheduleFormat { get; private set; }
-    public IReadOnlyList<User> Members => _members;
+
+    [JsonIgnore]
+    public AppUser Creator { get; private set; } = null!;
+
+    [JsonIgnore]
+    public IReadOnlyList<AppUser> Members => _members;
+
+    [JsonIgnore]
     public IReadOnlyList<Lesson> Lessons => _lessons;
     public string? InstitutionName { get; private set; }
     public string? Description { get; private set; }

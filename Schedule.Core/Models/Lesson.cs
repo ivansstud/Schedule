@@ -7,7 +7,7 @@ namespace Schedule.Core.Models;
 public class Lesson : Entity
 {
     public const int MaxNameLength = 50;
-    public const int MaxTeacherNameLength = 20;
+    public const int MaxTeacherNameLength = 30;
     public const int MaxDescriptionLength = 200;
     public const int MaxAuditoriumLength = 15;
 
@@ -76,7 +76,7 @@ public class Lesson : Entity
             auditorium = null;
         }
 
-        var newLesson = new Lesson(name, grpupId, weekType, lessonTime, dayOfWeek, lessonType, description, auditorium, teacherName);
+        var newLesson = new Lesson(name, grpupId, weekType, lessonTime, dayOfWeek, lessonType, auditorium, description, teacherName);
         return Result.Success(newLesson);
     }
 }

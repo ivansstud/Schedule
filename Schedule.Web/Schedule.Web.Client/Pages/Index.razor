@@ -1,0 +1,59 @@
+﻿@page "/"
+
+<PageTitle>Расписание</PageTitle>
+
+<RadzenStack Orientation="Orientation.Vertical" AlignItems="AlignItems.Center" JustifyContent="JustifyContent.Center" Gap="0.5rem" class="rz-p-sm-12">
+	<RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H5">
+		<b> Привет, @firstName 👋🏻 </b>
+	</RadzenText>
+
+	@if (groups.Count() > 0)
+	{
+		<RadzenText TextAlign="TextAlign.Center" TextStyle="TextStyle.H6">
+			Выбери группу из своего списка, создай группу или вступи по пригласительному коду
+		</RadzenText>
+		<RadzenListBox @bind-Value=@value
+		Data=@groups
+		Style="width: 70%; height:200px"
+		TextProperty="@nameof(Group.Name)"
+		ValueProperty="@nameof(Group.Id)">
+
+			<Template>
+				Группа: @((context as Group)!.Name) <br />
+				<span style="font-size: 12px"> @((context as Group)!.Role) </span>
+			</Template>
+		</RadzenListBox>
+	}
+
+</RadzenStack>
+
+
+
+
+@code {
+	string firstName = "Ivan";
+
+	List<Group> groups = [];
+	List<string> values = ["dsdsasda", "asdadsasd"];
+	string value = "qwrs";
+
+	protected override async Task OnInitializedAsync()
+	{
+		await base.OnInitializedAsync();
+
+		groups = new()
+		{
+			new Group(){ Name = "ИТ-122", Role = "Создатель", Id = "as"},
+			new Group(){ Name = "АИС-122", Role = "Участник", Id = "asd"},
+			new Group(){ Name = "ПМИ-122", Role = "Участник", Id = "dwa"},
+			new Group(){ Name = "ЕТ-122", Role = "Создатель", Id = "qwrs"},
+		};
+	}
+
+	public class Group
+	{
+		public string Id { get; set; } = "";
+		public string Name { get; set; } = "";
+		public string Role { get; set; } = "";
+	}
+}

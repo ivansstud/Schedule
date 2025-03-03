@@ -23,7 +23,7 @@ namespace Schedule.Infrastracture.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("GroupUser", b =>
+            modelBuilder.Entity("AppUserGroup", b =>
                 {
                     b.Property<long>("GroupsId")
                         .HasColumnType("bigint");
@@ -35,7 +35,40 @@ namespace Schedule.Infrastracture.Migrations
 
                     b.HasIndex("MembersId");
 
-                    b.ToTable("group_users", (string)null);
+                    b.ToTable("GroupUsers", (string)null);
+                });
+
+            modelBuilder.Entity("Schedule.Core.Models.AppUser", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+
+                    b.Property<long>("TelegramId")
+                        .HasColumnType("bigint");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "Schedule.Core.Models.AppUser.Name#UserName", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)")
+                                .HasColumnName("FirstName");
+
+                            b1.Property<string>("SecondName")
+                                .IsRequired()
+                                .HasMaxLength(30)
+                                .HasColumnType("nvarchar(30)")
+                                .HasColumnName("SecondName");
+                        });
+
+                    b.HasKey("Id");
+
+                    b.ToTable("users", (string)null);
                 });
 
             modelBuilder.Entity("Schedule.Core.Models.Group", b =>
@@ -68,8 +101,9 @@ namespace Schedule.Infrastracture.Migrations
 
                             b1.Property<string>("Value")
                                 .IsRequired()
-                                .HasColumnType("nvarchar(max)")
-                                .HasColumnName("schedule_format");
+                                .HasMaxLength(100)
+                                .HasColumnType("nvarchar(100)")
+                                .HasColumnName("ScheduleFormat");
                         });
 
                     b.HasKey("Id");
@@ -92,23 +126,25 @@ namespace Schedule.Infrastracture.Migrations
                         .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Description")
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long>("GroupId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("TeacherName")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("WeekType")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.ComplexProperty<Dictionary<string, object>>("DayOfWeek", "Schedule.Core.Models.Lesson.DayOfWeek#LessonDayOfWeek", b1 =>
                         {
@@ -118,20 +154,20 @@ namespace Schedule.Infrastracture.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasColumnName("day");
+                                .HasColumnName("DayType");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("LessonTime", "Schedule.Core.Models.Lesson.LessonTime#LessonTime", b1 =>
                         {
                             b1.IsRequired();
 
-                            b1.Property<DateOnly>("EndTime")
-                                .HasColumnType("date")
-                                .HasColumnName("end_time");
+                            b1.Property<TimeOnly>("EndTime")
+                                .HasColumnType("time")
+                                .HasColumnName("EndTime");
 
-                            b1.Property<DateOnly>("StartTime")
-                                .HasColumnType("date")
-                                .HasColumnName("start_time");
+                            b1.Property<TimeOnly>("StartTime")
+                                .HasColumnType("time")
+                                .HasColumnName("StartTime");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("LessonType", "Schedule.Core.Models.Lesson.LessonType#LessonType", b1 =>
@@ -142,7 +178,7 @@ namespace Schedule.Infrastracture.Migrations
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("nvarchar(100)")
-                                .HasColumnName("type");
+                                .HasColumnName("Type");
                         });
 
                     b.HasKey("Id");
@@ -152,40 +188,7 @@ namespace Schedule.Infrastracture.Migrations
                     b.ToTable("lessons", (string)null);
                 });
 
-            modelBuilder.Entity("Schedule.Core.Models.User", b =>
-                {
-                    b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
-
-                    b.Property<long>("TelegramId")
-                        .HasColumnType("bigint");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "Schedule.Core.Models.User.Name#UserName", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasMaxLength(30)
-                                .HasColumnType("nvarchar(30)")
-                                .HasColumnName("first_name");
-
-                            b1.Property<string>("SecondName")
-                                .IsRequired()
-                                .HasMaxLength(30)
-                                .HasColumnType("nvarchar(30)")
-                                .HasColumnName("second_name");
-                        });
-
-                    b.HasKey("Id");
-
-                    b.ToTable("users", (string)null);
-                });
-
-            modelBuilder.Entity("GroupUser", b =>
+            modelBuilder.Entity("AppUserGroup", b =>
                 {
                     b.HasOne("Schedule.Core.Models.Group", null)
                         .WithMany()
@@ -193,7 +196,7 @@ namespace Schedule.Infrastracture.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Schedule.Core.Models.User", null)
+                    b.HasOne("Schedule.Core.Models.AppUser", null)
                         .WithMany()
                         .HasForeignKey("MembersId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -202,7 +205,7 @@ namespace Schedule.Infrastracture.Migrations
 
             modelBuilder.Entity("Schedule.Core.Models.Group", b =>
                 {
-                    b.HasOne("Schedule.Core.Models.User", "Creator")
+                    b.HasOne("Schedule.Core.Models.AppUser", "Creator")
                         .WithMany("CreatedGroups")
                         .HasForeignKey("CreatorId")
                         .OnDelete(DeleteBehavior.Restrict)
@@ -220,14 +223,14 @@ namespace Schedule.Infrastracture.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Schedule.Core.Models.AppUser", b =>
+                {
+                    b.Navigation("CreatedGroups");
+                });
+
             modelBuilder.Entity("Schedule.Core.Models.Group", b =>
                 {
                     b.Navigation("Lessons");
-                });
-
-            modelBuilder.Entity("Schedule.Core.Models.User", b =>
-                {
-                    b.Navigation("CreatedGroups");
                 });
 #pragma warning restore 612, 618
         }

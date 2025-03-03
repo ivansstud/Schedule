@@ -5,9 +5,9 @@ using Schedule.Core.ValueObjects;
 
 namespace Schedule.Infrastracture.EF.Configurations;
 
-public class UserConfiguration : IEntityTypeConfiguration<User>
+public class UserConfiguration : IEntityTypeConfiguration<AppUser>
 {
-    public void Configure(EntityTypeBuilder<User> builder)
+    public void Configure(EntityTypeBuilder<AppUser> builder)
     {
         builder.ToTable("users");
 
@@ -17,7 +17,7 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 
         builder.HasMany(u => u.Groups)
             .WithMany(g => g.Members)
-            .UsingEntity(x => x.ToTable("group_users"));
+            .UsingEntity(x => x.ToTable("GroupUsers"));
 
         builder.HasMany(u => u.CreatedGroups)
             .WithOne(g => g.Creator)
@@ -28,10 +28,10 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
         {
             b.IsRequired();
             b.Property(n => n.FirstName)
-                .HasColumnName("first_name")
+                .HasColumnName("FirstName")
                 .HasMaxLength(UserName.MaxLength);
             b.Property(n => n.SecondName)
-                .HasColumnName("second_name")
+                .HasColumnName("SecondName")
                 .HasMaxLength(UserName.MaxLength);
         });
 
