@@ -7,11 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schedule.Core", "Schedule.C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Schedule.Infrastracture", "Schedule.Infrastracture\Schedule.Infrastracture.csproj", "{80FE51B3-9EA6-40EC-A233-4C86610C4ABC}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DevExtreme NuGet.config", "DevExtreme NuGet.config", "{4B898201-5F70-4794-9DB0-7D19951E89C7}"
-	ProjectSection(SolutionItems) = preProject
-		NuGet.config = NuGet.config
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Schedule.Web", "Schedule.Web\Schedule.Web.csproj", "{88BFC153-4B04-46C6-98C6-24DA00E84898}"
 EndProject
 Global
